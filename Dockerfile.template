@@ -1,0 +1,23 @@
+# base-image for debian buster on any machine using a template variable,
+# see more about dockerfile templates here: https://www.balena.io/docs/learn/develop/dockerfile/#dockerfile-templates
+# and about balena base images here: https://www.balena.io/docs/reference/base-images/base-images/
+FROM balenalib/%%BALENA_MACHINE_NAME%%-debian:buster-build
+
+# use `install_packages` if you need to install dependencies,
+# for instance if you need git, just uncomment the line below.
+RUN install_packages git libtool libusb-1.0-0-dev librtlsdr-dev rtl-sdr build-essential autoconf cmake pkg-config
+
+# Defines our working directory in container
+WORKDIR /app
+
+RUN git clone https://github.com/merbanan/rtl_433.git
+RUN cd rtl_433/ && mkdir build && cd build && cmake .. && make && make install && rm -rf /app/rtl_433
+
+COPY start.sh .
+RUN chmod +x start.sh
+
+# Enable udevd so that plugged dynamic hardware devices show up in our container.
+ENV UDEV=1
+
+# https://goinbigdata.com/docker-run-vs-cmd-vs-entrypoint/
+CMD bash start.sh
