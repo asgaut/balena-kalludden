@@ -5,13 +5,24 @@ FROM balenalib/%%BALENA_MACHINE_NAME%%-debian:buster-build
 
 # use `install_packages` if you need to install dependencies,
 # for instance if you need git, just uncomment the line below.
-RUN install_packages git libtool libusb-1.0-0-dev librtlsdr-dev rtl-sdr build-essential autoconf cmake pkg-config
+RUN install_packages git libtool libusb-1.0-0-dev build-essential autoconf cmake pkg-config
+
+# Manually build librtlsdr instead
+# Because of this problem:
+# https://github.com/steve-m/librtlsdr/commit/81833a1cf6288fee93a9157c0f60cafb5ec340b9
+#RUN install_packages librtlsdr-dev rtl-sdr
 
 # Defines our working directory in container
 WORKDIR /app
 
-RUN git clone https://github.com/merbanan/rtl_433.git
-RUN cd rtl_433/ && mkdir build && cd build && cmake .. && make && make install && rm -rf /app/rtl_433
+RUN git clone https://github.com/steve-m/librtlsdr.git && \
+    cd librtlsdr/ && mkdir build && cd build && cmake .. && make && make install && \
+    ldconfig && \
+    rm -rf /app/librtlsdr
+
+RUN git clone https://github.com/merbanan/rtl_433.git && \
+    cd rtl_433/ && mkdir build && cd build && cmake .. && make && make install && \
+    rm -rf /app/rtl_433
 
 COPY start.sh .
 RUN chmod +x start.sh
