@@ -1,0 +1,17 @@
+FROM balenalib/%%BALENA_MACHINE_NAME%%-alpine-python:2.7-build
+
+# Note: pip is unable to compile the dependencies when using a -run image.
+# https://www.balena.io/docs/reference/base-images/base-images/#how-to-pick-a-base-image
+
+#switch on systemd init system in container
+#ENV INITSYSTEM on
+
+# pip install python deps from requirements.txt
+# For caching until requirements.txt changes
+COPY ./requirements.txt /requirements.txt
+RUN pip install -r /requirements.txt
+
+COPY . /usr/src/app
+WORKDIR /usr/src/app
+
+CMD ["python", "mqtt-client.py"]

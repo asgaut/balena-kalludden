@@ -1,0 +1,10 @@
+version: '2'
+services:
+  heatercontrol:
+    restart: always
+    build: ./heatercontrol
+    privileged: true
+  rtl433:
+    restart: never
+    build: ./rtl433
+    privileged: true

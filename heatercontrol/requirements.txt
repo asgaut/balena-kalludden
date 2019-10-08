@@ -1,0 +1,2 @@
+RPi.Gpio
+paho-mqtt
