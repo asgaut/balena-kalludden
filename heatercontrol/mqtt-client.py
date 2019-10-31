@@ -9,7 +9,7 @@ import datetime
 import relay as r
 
 # must end with / if not empty
-topic_root = "balena/kalludden/"
+topic_root = "/balena/kalludden/"
 
 def on_message(client, userdata, message):
     print("message received:", str(message.payload.decode("utf-8")))
@@ -19,7 +19,7 @@ def on_message(client, userdata, message):
     # Note: message.retain will be 1 when this topic is received just after connecting
     # and the topic has been published as "retained".
     # message.retain is 0 when published while we are already connected.
-    if message.payload == "ON":
+    if str(message.payload.decode("utf-8")) == "ON":
         print("Turning relay on")
         r.close()
         client.publish(topic_root + "feedback/status", "ON", retain = True)
