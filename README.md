@@ -13,19 +13,18 @@ Documentation and list of supported devices is at https://github.com/merbanan/rt
 
 #### Device service variables
 
-* RTL_433_INPUT: `-H 60 -R 18 -R 19 -R 153 -f 868.38M -f 433.92M -M newmodel -M level -M utc -C si`
-* RTL_433_OUTPUT: `-F mqtt://mqtt_server_ip:1883,devices=/dev[/model][/id][/channel],events=/events,states=/states`
+- RTL_433_INPUT: `-R 18 -R 19 -R 153 -C si -M level -M utc`
+- RTL_433_OUTPUT: `-F mqtt://mqtt_server_ip:1883,devices=/dev[/model][/id][/channel],events=/events,states=/states`
 
 When testing under Windows: use numeric IP address for the MQTT server as the DNS lookup in rtl_433 does not work
 under Windows OS.
 
 #### Description
 
-* -H 60 -f 868.38M -f 433.92M: Hop every 60 s between these frequencies
-* -R 18: Enable Fineoffset-WH2 (Telldus) temperature/humidity sensor
-* -R 19: Enable Nexus (Clas Ohlson Cotech 36-6726) temperature/humidity sensor
-* -R 153: Enable Clas Ohlson Cotech 36-7959 weather station
-* -M newmodel -M level -M utc -C si: Various output control parameteres
+- -R 18: Enable Fineoffset-WH2 (Telldus) temperature/humidity sensor
+- -R 19: Enable Nexus (Clas Ohlson Cotech 36-6726) temperature/humidity sensor
+- -R 153: Enable Clas Ohlson Cotech 36-7959 weather station
+- -M level -M utc -C si: Various output control parameteres
 
 ### heatercontrol
 
@@ -33,19 +32,20 @@ This service listens for commands on a MQTT topic and controls a relay connected
 
 ## Testing
 
-* Install MQTT client tools using `sudo apt install mosquitto-clients`
-* Listen for all published messages using: `mosquitto_sub -t "/#" -h mqtt_server_ip -v`
+- Install MQTT client tools using `sudo apt install mosquitto-clients`
+- Listen for all published messages using: `mosquitto_sub -t "/#" -h mqtt_server_ip -v`
 
 ## Required hardware
 
-* Raspberry Pi 3B
-* 16 GB Micro-SD Card (Balena recommend Sandisk Extreme Pro SD cards)
-* Micro-USB cable
-* Power supply
-* Case (optional)
-* RTL-SDR USB stick
+- Raspberry Pi 3B
+- 16 GB Micro-SD Card (Balena recommend Sandisk Extreme Pro SD cards)
+- Micro-USB cable
+- Power supply
+- Case (optional)
+- RTL-SDR USB stick
 
 ## Sample MQTT data from RTL_433
+
 ```text
 /events {"time":"2020-07-05 21:04:23","model":"Nexus-TH","id":173,"channel":1,"battery_ok":1,"temperature_C":22.7,"humidity":49,"mod":"ASK","freq":433.98397,"rssi":-0.111965,"snr":35.04253,"noise":-35.1545}
 /dev/Nexus-TH/173/1/time 2020-07-05 21:04:23
